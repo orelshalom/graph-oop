@@ -26,7 +26,7 @@ public interface graph_algorithms {
 	
 	/** 
 	 * Compute a deep copy of this graph.
-	 * @return
+	 * @return the cloned graph.
 	 */
 	public graph copy();
 

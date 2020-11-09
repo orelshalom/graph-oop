@@ -32,7 +32,7 @@ public interface node_data {
 	public void addNi(node_data t);
 
     /**
-     * Removes the edge this-key,
+     * Removes the edge between this and node,
 	 * @param node
 	 */
 	public void removeNode(node_data node);

@@ -26,6 +26,7 @@ public interface graph {
 	 * @return
 	 */
 	public boolean hasEdge(int node1, int node2);
+
 	/**
 	 * add a new node to the graph with the given node_data.
 	 * Note: this method should run in O(1) time.

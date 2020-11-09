@@ -3,18 +3,17 @@ package objects;
 import java.util.Collection;
 
 /**
- * This interface represents an undirectional unweighted graph.
+ * This interface represents an undirected unweighted graph.
  * It should support a large number of nodes (over 10^6, with average degree of 10).
- * The implementation should be based on an efficient compact representation 
- * (should NOT be based on a n*n matrix).
- *
+ * The implementation based on an efficient compact representation
+ * (NOT based on a n*n matrix).
  */
 
 public interface graph {
 	
 	/**
-	 * return the node_data by the node_id,
-	 * @param key - the node_id
+	 * return the node_data by the node id,
+	 * @param key - the node id
 	 * @return the node_data by the node_id, null if none.
 	 */
 	public node_data getNode(int key);

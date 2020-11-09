@@ -4,21 +4,21 @@ import java.util.Collection;
 
 /**
  * This interface represents the set of operations applicable on a 
- * node (vertex) in an (undirectional) unweighted graph.
+ * node (vertex) in an undirected unweighted graph.
  * @author boaz.benmoshe
- *
  */
 public interface node_data {
 	
 	/**
 	 * Return the key (id) associated with this node.
-	 * Note: each node_data should have a unique key.
-	 * @return
+	 * Each node_data should have a unique key.
+	 * @return the unique id of this node.
 	 */
 	public int getKey();
 
     /**
-	 * This method returns a collection with all the Neighbor nodes of this node_data */
+	 * This method returns a collection with all the Neighbors of this node_data
+	 */
 	public Collection<node_data> getNi();
 
     /**
@@ -47,7 +47,6 @@ public interface node_data {
 	 * Allows changing the remark (meta data) associated with this node.
 	 * @param s
 	 */
-	
 	public void setInfo(String s);
 	
 	/**

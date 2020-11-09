@@ -2,14 +2,13 @@ package algorithms;
 
 /**
  * This interface represents the "regular" Graph Theory algorithms including:
- * 0. clone(); (copy)
+ * 0. clone(); - deep copy
  * 1. init(graph);
  * 2. isConnected();
  * 3. int shortestPathDist(int src, int dest);
  * 4. List<Node> shortestPath(int src, int dest);
  *
  * @author boaz.benmoshe
- *
  */
 
 import java.util.List;

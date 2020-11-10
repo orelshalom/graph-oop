@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class NodeData implements node_data 
 {	
 	private static int keys;
-	private int id;
+	private final int id;
 	private int color;
 	private String info;
 	private HashMap<Integer, node_data> neighbors;
@@ -17,13 +17,14 @@ public class NodeData implements node_data
 	{
 		this.id = keys++;
 		this.color = WHITE;
-		this.neighbors = new HashMap<Integer, node_data>();
+		this.neighbors = new HashMap<>();
 		this.info = "id: " + id + ", neighbors: " + neighbors.size(); 
 	}
 
 	
 	public NodeData(int key, int tag, HashMap<Integer, node_data> hm)
 	{
+		this.id = key;
 		this.color = tag;
 		this.neighbors = hm;
 	}

@@ -1,5 +1,6 @@
 package algorithms;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,14 +16,15 @@ import objects.weighted_graph;
 public class WGraph_Algo implements weighted_graph_algorithms
 {
 	private weighted_graph wg;
-	private HashMap<Integer, Double> dist;
+	private HashMap<Integer, Integer> visited;
 	private HashMap<Integer, node_info> parents;
-	
+	private PriorityQueue<node_info> pq;
 	
 	public WGraph_Algo() 
 	{
-		this.dist = new HashMap<Integer, Double>();
-		this.parents = new HashMap<Integer, node_info>();
+		this.visited = new HashMap<>();
+		this.parents = new HashMap<>();
+		this.pq = new PriorityQueue<>();
 	}
 	
 	
@@ -30,14 +32,15 @@ public class WGraph_Algo implements weighted_graph_algorithms
 	public void init(weighted_graph g) 
 	{
 		this.wg = g;
-		this.dist = new HashMap<Integer, Double>();
-		this.parents = new HashMap<Integer, node_info>();
+		this.visited = new HashMap<>();
+		this.parents = new HashMap<>();
+		this.pq = new PriorityQueue<>();
 
 		for (node_info node : g.getV())
 		{
-			dist.put(node.getKey(), Double.POSITIVE_INFINITY);
+			visited.put(node.getKey(), 0);
 			parents.put(node.getKey(), null);
-			node.setTag(0);
+			node.setTag(Double.POSITIVE_INFINITY);
 		}
 	}
 
@@ -48,32 +51,43 @@ public class WGraph_Algo implements weighted_graph_algorithms
 		return wg;
 	}
 
-	
+
+	private void addCopyOfNode(weighted_graph cloned_wg, node_info node)
+	{
+		cloned_wg.addNode(node.getKey());
+		node_info newNode = cloned_wg.getNode(node.getKey());
+		newNode.setInfo(node.getInfo());
+		newNode.setTag(node.getTag());
+	}
+
 	private void copyToHashMap(weighted_graph cloned_wg, ArrayList<node_info> wg_nodes)
 	{
-		Queue<node_info> queue = new LinkedList<node_info>();
+		Queue<node_info> queue = new LinkedList<>();
 		
 		node_info src = wg_nodes.get(0);
+		addCopyOfNode(cloned_wg, src);
 		queue.add(src);
-		cloned_wg.addNode(src.getKey());//
 
 		while (!queue.isEmpty())
 		{
 			node_info q_node = queue.remove();
-			ArrayList<node_info> neighbors = new ArrayList<node_info>(wg.getV(q_node.getKey()));
+			ArrayList<node_info> neighbors = new ArrayList<>(wg.getV(q_node.getKey()));
 			
 			for (node_info ni : neighbors) 
 			{
 				if (cloned_wg.getNode(ni.getKey()) == null)
 				{ 
-					cloned_wg.addNode(ni.getKey());
-					queue.add(ni); 
+					addCopyOfNode(cloned_wg, ni);
+					queue.add(ni);
 				}
 
 				wg_nodes.remove(ni);
-				cloned_wg.connect(q_node.getKey(), ni.getKey(), 
-									wg.getEdge(q_node.getKey(), ni.getKey())); 
-			} 
+
+				if (!cloned_wg.hasEdge(q_node.getKey(), ni.getKey())) {
+					cloned_wg.connect(q_node.getKey(), ni.getKey(),
+							wg.getEdge(q_node.getKey(), ni.getKey()));
+				}
+			}
 
 			wg_nodes.remove(q_node);
 		}
@@ -83,9 +97,8 @@ public class WGraph_Algo implements weighted_graph_algorithms
 	@Override
 	public weighted_graph copy() 
 	{
-		ArrayList<node_info> wg_nodes = new ArrayList<node_info>(wg.getV());
-		weighted_graph cloned_wg = new WGraph_DS(wg.edgeSize(), wg.getMC(), 
-													new HashMap<Integer, node_info>());
+		ArrayList<node_info> wg_nodes = new ArrayList<>(wg.getV());
+		weighted_graph cloned_wg = new WGraph_DS();
 
 		// for each connection component do dijkstra copy
 		while (!wg_nodes.isEmpty())
@@ -99,30 +112,28 @@ public class WGraph_Algo implements weighted_graph_algorithms
 	
 	private void dijkstra(node_info src) // O(|E|*log|V|)
 	{
-		PriorityQueue<node_info> pq = new PriorityQueue<node_info>();
-		
-		dist.put(src.getKey(), 0.0);
 		pq.add(src);
-		
+		src.setTag(0);
+
 		while (!pq.isEmpty()) // O(|E|)
 		{
 			node_info node = pq.poll(); // O(log |V|)
-			ArrayList<node_info> neighbors = new ArrayList<node_info>(wg.getV(node.getKey()));
+			ArrayList<node_info> neighbors = new ArrayList<>(wg.getV(node.getKey()));
 			
 			for (node_info ni : neighbors)
 			{
-				if (ni.getTag() == 0 
-					&& dist.get(ni.getKey()) > dist.get(node.getKey()) 
-												+ wg.getEdge(node.getKey(), ni.getKey())) 
+				double node_dist = node.getTag() + wg.getEdge(node.getKey(), ni.getKey());
+
+				if (visited.get(ni.getKey()) == 0 && ni.getTag() > node_dist)
 				{
-					dist.put(ni.getKey(), dist.get(node.getKey()));
+					ni.setTag(node_dist);
 					parents.put(ni.getKey(), node);
 					pq.remove(ni);
 					pq.add(ni);
 				}
 			}
 			
-			node.setTag(1);
+			visited.put(node.getKey(), 1);
 		}
 	}
 	
@@ -130,7 +141,7 @@ public class WGraph_Algo implements weighted_graph_algorithms
 	@Override
 	public boolean isConnected() 
 	{
-		ArrayList<node_info> g_nodes = new ArrayList<node_info>(wg.getV());
+		ArrayList<node_info> g_nodes = new ArrayList<>(wg.getV());
 		
 		if (!g_nodes.isEmpty())
 		{
@@ -138,7 +149,7 @@ public class WGraph_Algo implements weighted_graph_algorithms
 			dijkstra(g_nodes.get(0));			
 		}
 
-		return !dist.containsValue(Double.POSITIVE_INFINITY);
+		return !visited.containsValue(0);
 	}
 
 	
@@ -147,15 +158,16 @@ public class WGraph_Algo implements weighted_graph_algorithms
 	{
 		node_info src_n = wg.getNode(src);
 		node_info dest_n = wg.getNode(dest);
-		
-		if(src_n != null)
+
+		if(src_n != null && dest_n != null)
 		{
 			init(wg);
 			dijkstra(src_n);
 
-			return (dest_n == null || dist.get(dest) == Double.POSITIVE_INFINITY) ? (-1) : (dist.get(dest));
+			double d_tag = dest_n.getTag();
+			if (d_tag != Double.POSITIVE_INFINITY) { return d_tag; }
 		}
-		
+
 		return -1;
 	}
 
@@ -165,17 +177,18 @@ public class WGraph_Algo implements weighted_graph_algorithms
 	{
 		node_info src_n = wg.getNode(src);
 		node_info dest_n = wg.getNode(dest);
-		List<node_info> nodes_path = new ArrayList<node_info>();
 
 		if (src_n == null || dest_n == null)
 		{
 			return null;
 		}
-		
+
 		init(wg);
 		dijkstra(dest_n);
 
-		while (src_n != dest_n)
+		List<node_info> nodes_path = new ArrayList<>();
+
+		while (src_n != dest_n && src_n != null)
 		{
 			nodes_path.add(src_n);
 			src_n = parents.get(src_n.getKey());			
@@ -183,20 +196,44 @@ public class WGraph_Algo implements weighted_graph_algorithms
 		
 		nodes_path.add(src_n);
 
-		return nodes_path;
+		return (src_n == null) ? null : nodes_path;
 	}
 
 	
 	@Override
-	public boolean save(String file) 
+	public boolean save(String file_path) // file.ser
 	{
-		return false;
+		try {
+			FileOutputStream fos = new FileOutputStream(file_path);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+			oos.writeObject(wg);
+
+			fos.close();
+			oos.close();
+		} catch (IOException e) {
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
-	public boolean load(String file) 
+	public boolean load(String file_path)
 	{
-		return false;
+		try {
+			FileInputStream fis = new FileInputStream(file_path);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+
+			this.wg = (weighted_graph) ois.readObject();
+
+			fis.close();
+			ois.close();
+		} catch (IOException | ClassNotFoundException e) {
+			return false;
+		}
+
+		return true;
 	}
 
 }

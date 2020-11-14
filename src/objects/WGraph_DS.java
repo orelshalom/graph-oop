@@ -12,7 +12,7 @@ public class WGraph_DS implements weighted_graph, Serializable
 	private int mode_count;
 	private HashMap<Integer, node_info> nodes;
 
-	private class NodeInfo implements node_info, Comparable<NodeInfo>
+	private class NodeInfo implements node_info, Comparable<NodeInfo>, Serializable
 	{
 		private final int id;
 		private double tag;

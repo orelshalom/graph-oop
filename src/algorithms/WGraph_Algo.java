@@ -212,6 +212,7 @@ public class WGraph_Algo implements weighted_graph_algorithms
 			fos.close();
 			oos.close();
 		} catch (IOException e) {
+			e.printStackTrace();
 			return false;
 		}
 

@@ -1,5 +1,9 @@
 /.idea/
 /out/
 /course-material/
+/lib/
+
+/src/run/
+
 *.iml
-*.ser
+*.obj

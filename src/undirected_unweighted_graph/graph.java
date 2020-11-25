@@ -1,4 +1,6 @@
-package objects;
+package undirected_unweighted_graph;
+
+import undirected_unweighted_graph.node_data;
 
 import java.util.Collection;
 

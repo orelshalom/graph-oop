@@ -1,4 +1,4 @@
-package objects;
+package undirected_unweighted_graph;
 
 import java.util.Collection;
 

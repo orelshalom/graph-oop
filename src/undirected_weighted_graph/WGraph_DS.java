@@ -1,4 +1,4 @@
-package objects;
+package undirected_weighted_graph;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ public class WGraph_DS implements weighted_graph, Serializable
 	private int mode_count;
 	private HashMap<Integer, node_info> nodes;
 
-	private class NodeInfo implements node_info, Comparable<NodeInfo>, Serializable
+	private class NodeInfo implements node_info, Serializable
 	{
 		private final int id;
 		private double tag;
@@ -58,12 +58,6 @@ public class WGraph_DS implements weighted_graph, Serializable
 		}
 
 		public HashMap<Integer, Edge> getNi_edges() { return ni_edges; }
-
-		@Override
-		public int compareTo(NodeInfo ni)
-		{
-			return (int)(this.tag - ni.getTag());
-		}
 
 		@Override
 		public boolean equals(Object o) {

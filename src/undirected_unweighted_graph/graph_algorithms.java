@@ -1,4 +1,4 @@
-package algorithms;
+package undirected_unweighted_graph;
 
 /**
  * This interface represents the "regular" Graph Theory algorithms including:
@@ -12,9 +12,6 @@ package algorithms;
  */
 
 import java.util.List;
-
-import objects.graph;
-import objects.node_data;
 
 public interface graph_algorithms {
 	

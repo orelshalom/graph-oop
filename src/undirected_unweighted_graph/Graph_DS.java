@@ -1,9 +1,8 @@
-package objects;
+package undirected_unweighted_graph;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class Graph_DS implements graph
 {

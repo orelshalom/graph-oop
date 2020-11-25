@@ -1,4 +1,4 @@
-package algorithms;
+package undirected_weighted_graph;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -8,23 +8,17 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import objects.WGraph_DS;
-import objects.node_info;
-import objects.weighted_graph;
-
-
 public class WGraph_Algo implements weighted_graph_algorithms
 {
 	private weighted_graph wg;
 	private HashMap<Integer, Integer> visited;
 	private HashMap<Integer, node_info> parents;
-	private PriorityQueue<node_info> pq;
-	
+
 	public WGraph_Algo() 
 	{
+		this.wg = new WGraph_DS();
 		this.visited = new HashMap<>();
 		this.parents = new HashMap<>();
-		this.pq = new PriorityQueue<>();
 	}
 	
 	
@@ -34,7 +28,6 @@ public class WGraph_Algo implements weighted_graph_algorithms
 		this.wg = g;
 		this.visited = new HashMap<>();
 		this.parents = new HashMap<>();
-		this.pq = new PriorityQueue<>();
 
 		for (node_info node : g.getV())
 		{
@@ -112,6 +105,8 @@ public class WGraph_Algo implements weighted_graph_algorithms
 	
 	private void dijkstra(node_info src) // O(|E|*log|V|)
 	{
+		PriorityQueue<node_info> pq = new PriorityQueue<>((o1, o2) -> (int) (o1.getTag() - o2.getTag()));
+
 		pq.add(src);
 		src.setTag(0);
 

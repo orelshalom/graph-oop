@@ -1,15 +1,10 @@
-package algorithms;
+package undirected_unweighted_graph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-
-import objects.NodeData;
-import objects.graph;
-import objects.node_data;
-import objects.Graph_DS;
 
 public class Graph_Algo implements graph_algorithms
 {
@@ -20,8 +15,8 @@ public class Graph_Algo implements graph_algorithms
 
 	public Graph_Algo()
 	{
-		this.dist = new HashMap<Integer, Integer>();
-		this.parents = new HashMap<Integer, node_data>();
+		this.dist = new HashMap<>();
+		this.parents = new HashMap<>();
 	}
 
 
@@ -29,8 +24,8 @@ public class Graph_Algo implements graph_algorithms
 	public void init(graph g)
 	{
 		this.g = g;
-		this.dist = new HashMap<Integer, Integer>();
-		this.parents = new HashMap<Integer, node_data>();
+		this.dist = new HashMap<>();
+		this.parents = new HashMap<>();
 
 		for (node_data node : g.getV())
 		{
@@ -43,11 +38,11 @@ public class Graph_Algo implements graph_algorithms
 	
 	private void copyToHashMap(HashMap<Integer, node_data> cloned_hm, ArrayList<node_data> g_nodes)
 	{
-		Queue<node_data> queue = new LinkedList<node_data>();
+		Queue<node_data> queue = new LinkedList<>();
 		node_data src = g_nodes.get(0);
 		queue.add(src);
 		cloned_hm.put(src.getKey(), new NodeData(src.getKey(), src.getTag(), 
-													new HashMap<Integer, node_data>()));
+													new HashMap<>()));
 
 		while (!queue.isEmpty())
 		{
@@ -60,7 +55,7 @@ public class Graph_Algo implements graph_algorithms
 				if (cloned_node == null)
 				{ 
 					cloned_node = new NodeData(ni.getKey(), ni.getTag(), 
-												new HashMap<Integer, node_data>()); 
+												new HashMap<>());
 					cloned_hm.put(cloned_node.getKey(),cloned_node); 
 					queue.add(ni); 
 				}
@@ -77,8 +72,8 @@ public class Graph_Algo implements graph_algorithms
 	@Override
 	public graph copy()
 	{
-		ArrayList<node_data> g_nodes = new ArrayList<node_data>(g.getV());
-		HashMap<Integer, node_data> cloned_hm = new HashMap<Integer, node_data>();
+		ArrayList<node_data> g_nodes = new ArrayList<>(g.getV());
+		HashMap<Integer, node_data> cloned_hm = new HashMap<>();
 
 		// for each connection component do BFS copy
 		while (!g_nodes.isEmpty())
@@ -92,7 +87,7 @@ public class Graph_Algo implements graph_algorithms
 
 	private void BFS(node_data src)
 	{
-		Queue<node_data> queue = new LinkedList<node_data>();
+		Queue<node_data> queue = new LinkedList<>();
 
 		src.setTag(NodeData.GRAY);
 		dist.put(src.getKey(), 0);
@@ -101,7 +96,7 @@ public class Graph_Algo implements graph_algorithms
 		while (!queue.isEmpty())
 		{
 			node_data q_node = queue.remove();
-			ArrayList<node_data> q_node_ni = new ArrayList<node_data>(q_node.getNi());
+			ArrayList<node_data> q_node_ni = new ArrayList<>(q_node.getNi());
 
 			for (node_data ni : q_node_ni) 
 			{
@@ -122,8 +117,8 @@ public class Graph_Algo implements graph_algorithms
 	@Override
 	public boolean isConnected()
 	{
-		ArrayList<node_data> g_nodes = new ArrayList<node_data>(g.getV());
-		
+		ArrayList<node_data> g_nodes = new ArrayList<>(g.getV());
+
 		init(g);
 
 		if (!g_nodes.isEmpty())
@@ -155,15 +150,13 @@ public class Graph_Algo implements graph_algorithms
 	{
 		node_data src_n = g.getNode(src);
 		node_data dest_n = g.getNode(dest);
-		List<node_data> nodes_path = new ArrayList<node_data>();
 
-		if (src_n == null || dest_n == null)
-		{
-			return null;
-		}
-		
+		if (src_n == null || dest_n == null) return null;
+
 		init(g);
 		BFS(dest_n);
+
+		List<node_data> nodes_path = new ArrayList<>();
 
 		while (src_n != dest_n)
 		{

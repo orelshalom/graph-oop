@@ -1,9 +1,9 @@
-package objects;
+package undirected_unweighted_graph;
 
 import java.util.Collection;
 import java.util.HashMap;
 
-public class NodeData implements node_data 
+public class NodeData implements node_data
 {	
 	private static int keys;
 	private final int id;

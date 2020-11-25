@@ -1,9 +1,9 @@
-package algorithms;
+package undirected_weighted_graph;
 
 import java.util.List;
 
-import objects.node_info;
-import objects.weighted_graph;
+import undirected_weighted_graph.node_info;
+import undirected_weighted_graph.weighted_graph;
 
 /**
  * This interface represents an Undirected (non-negative) Weighted Graph Theory algorithms including:

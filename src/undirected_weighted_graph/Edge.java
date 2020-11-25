@@ -1,4 +1,4 @@
-package objects;
+package undirected_weighted_graph;
 
 import java.io.Serializable;
 import java.util.Objects;

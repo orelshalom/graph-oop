@@ -14,17 +14,6 @@ public interface node_data {
      */
     public int getKey();
 
-    /** Returns the location of this node, if
-     * none return null.
-     * @return
-     */
-    public geo_location getLocation();
-
-    /** Allows changing this node's location.
-     * @param p - new location  (position) of this node.
-     */
-    public void setLocation(geo_location p);
-
     /**
      * Returns the weight associated with this node.
      * @return
